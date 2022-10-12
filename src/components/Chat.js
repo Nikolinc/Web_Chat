@@ -5,15 +5,14 @@ import { Grid, Container, TextField, Button, Avatar } from "@mui/material";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import Loader from "./Loader";
 import { Timestamp, FieldValue } from "firebase/firestore";
-import { collection, addDoc, query,orderBy } from "firebase/firestore";
-import { doc } from "firebase/firestore";
+import { collection, addDoc, query, orderBy } from "firebase/firestore";
 
 const Chat = () => {
   const { auth, firestore } = useContext(Context);
   const [user] = useAuthState(auth);
   const [value, setValue] = useState("");
   const [messages, loading] = useCollectionData(
-    query(collection(firestore, "messeges",orderBy("createAt")))
+    query(collection(firestore, "messeges"), orderBy("createAt", "desc"))
   );
 
   const setMessage = async () => {
@@ -25,7 +24,6 @@ const Chat = () => {
       createAt: FieldValue | Timestamp | Date,
     });
     setValue("");
-    
   };
 
   if (loading) {
