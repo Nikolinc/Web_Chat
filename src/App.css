@@ -87,3 +87,17 @@
     transform: scale(1.5);
   }
 }
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+body {
+  background: #424952;
+  background-size: 1800px;
+  color: #fff;
+}
+#standard-basic {
+  color: #fff;
+  border-color: #fff transparent;
+}

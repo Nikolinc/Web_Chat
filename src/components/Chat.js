@@ -1,7 +1,14 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../index";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Grid, Container, TextField, Button, Avatar } from "@mui/material";
+import {
+  Grid,
+  Container,
+  TextField,
+  Button,
+  Avatar,
+  radioClasses,
+} from "@mui/material";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import Loader from "./Loader";
 import { Timestamp, FieldValue } from "firebase/firestore";
@@ -12,7 +19,7 @@ const Chat = () => {
   const [user] = useAuthState(auth);
   const [value, setValue] = useState("");
   const [messages, loading] = useCollectionData(
-    query(collection(firestore, "messeges"), orderBy("createAt", "desc"))
+    query(collection(firestore, "messeges"), orderBy("createAt"))
   );
 
   const setMessage = async () => {
@@ -21,9 +28,11 @@ const Chat = () => {
       displayName: user.displayName,
       photoURL: user.photoURL,
       text: value,
-      createAt: FieldValue | Timestamp | Date,
+      createAt: Date(),
     });
     setValue("");
+    console.log(FieldValue);
+    console.log(Date());
   };
 
   if (loading) {
@@ -33,28 +42,36 @@ const Chat = () => {
     <Container>
       <Grid
         container
-        style={{ height: window.innerHeight - 50, marginTop: 20 }}
+        style={{
+          height: window.innerHeight - 50,
+          marginTop: 20,
+          overflow: "hidden",
+        }}
         justifyContent="center"
       >
         <div
           style={{
-            width: "90%",
+            width: "80%",
             height: "78vh",
-            border: "1px solid black",
+            //border: "1px solid black",
             overflow: "auto",
           }}
         >
           {messages.map((message) => (
             <div
               style={{
+                width: "250px",
                 margin: 10,
-                border:
-                  user.uid === message.uid
-                    ? "2px solid green"
-                    : "2px dashed red",
+                background: "#333",
                 marginLeft: user.uid === message.uid ? "auto" : "10px",
-
+                color: "white",
+                borderRadius:
+                  user.uid === message.uid
+                    ? "10px 0px 10px 10px"
+                    : "0px 10px 10px 10px",
                 padding: 5,
+                justifyContent:
+                  user.uid === message.uid ? "flex-end" : "flex-start",
               }}
             >
               <Grid container>
@@ -72,11 +89,13 @@ const Chat = () => {
           style={{ width: "90%" }}
         >
           <TextField
+            id="standard-basic"
+            variant="outlined"
             fullWidth
             maxRows={2}
-            variant={"outlined"}
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            style={{ background: "#333", borderRadius: "5px", color: "white" }}
           />
           <Button variant={"outlined"} onClick={() => setMessage()}>
             Send

@@ -12,6 +12,7 @@ const Login = () => {
   const loginGoogle = async () => {
     const provider = new GoogleAuthProvider();
     const { user } = await signInWithPopup(auth, provider);
+
     console.log(user);
   };
 
@@ -38,7 +39,6 @@ const Login = () => {
               />
               <p>Continue with Google</p>
             </Button>
-      
           </Box>
         </Grid>
       </Grid>
