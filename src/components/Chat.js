@@ -84,9 +84,11 @@ const Chat = () => {
         </div>
         <Grid
           container
-          direction={"column"}
-          alignItems={"flex-end"}
-          style={{ width: "90%" }}
+          component="form"
+          //direction={"row-reverse"}
+          //alignItems={"flex-end"}
+          flexWrap={"nowrap"}
+          style={{ width: "90%", height: "6%" }}
         >
           <TextField
             id="standard-basic"
@@ -97,7 +99,13 @@ const Chat = () => {
             onChange={(e) => setValue(e.target.value)}
             style={{ background: "#333", borderRadius: "5px", color: "white" }}
           />
-          <Button variant={"outlined"} onClick={() => setMessage()}>
+          <Button
+            variant={"outlined"}
+            onClick={() => {
+              if (value !== "" && value < 255) setMessage();
+            }}
+            style={{ color: "#fff", borderColor: "#fff", width: "15%" }}
+          >
             Send
           </Button>
         </Grid>
