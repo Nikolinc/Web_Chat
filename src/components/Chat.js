@@ -102,7 +102,7 @@ const Chat = () => {
           <Button
             variant={"outlined"}
             onClick={() => {
-              if (value !== "" && value < 255) setMessage();
+              if (value !== "" && value.length < 255) setMessage();
             }}
             style={{ color: "#fff", borderColor: "#fff", width: "15%" }}
           >
