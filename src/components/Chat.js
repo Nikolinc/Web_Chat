@@ -9,6 +9,7 @@ import {
   Avatar,
   radioClasses,
 } from "@mui/material";
+import imageIcon from "@mui/icons-material/MoveToInbox";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import Loader from "./Loader";
 import { Timestamp, FieldValue } from "firebase/firestore";
@@ -33,6 +34,22 @@ const Chat = () => {
     setValue("");
     console.log(FieldValue);
     console.log(Date());
+  };
+  const handleImageChange = async (evt) => {
+    const cFiles = evt.target.files;
+    if (cFiles.length > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(cFiles[0]);
+      console.log(reader);
+      addDoc(collection(firestore, "messeges"), {
+        uid: user.uid,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        text: "",
+        image: reader.result,
+        createAt: Date(),
+      });
+    } else this.formData.image = "";
   };
 
   if (loading) {
@@ -88,23 +105,44 @@ const Chat = () => {
           //direction={"row-reverse"}
           //alignItems={"flex-end"}
           flexWrap={"nowrap"}
-          style={{ width: "90%", height: "6%" }}
+          style={{
+            background: "#343434",
+            width: "70%",
+            height: "4%",
+            borderRadius: "5px",
+          }}
         >
+          <Button
+            variant={"outlined"}
+            onClick={() => {
+              if (value !== "" && value.length < 255) setMessage();
+            }}
+            style={{
+              color: "#fff",
+              borderColor: "#343434",
+              width: "5%",
+              borderRadius: "5px",
+            }}
+          ></Button>
           <TextField
             id="standard-basic"
-            variant="outlined"
+            variant="standard"
             fullWidth
             maxRows={2}
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            style={{ background: "#333", borderRadius: "5px", color: "white" }}
+            style={{
+              background: "none",
+              borderColor: "none",
+              color: "white",
+            }}
           />
           <Button
             variant={"outlined"}
             onClick={() => {
               if (value !== "" && value.length < 255) setMessage();
             }}
-            style={{ color: "#fff", borderColor: "#fff", width: "15%" }}
+            style={{ color: "#fff", borderColor: "#343434", width: "15%" }}
           >
             Send
           </Button>
