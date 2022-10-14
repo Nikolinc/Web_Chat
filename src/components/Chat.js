@@ -35,7 +35,7 @@ const Chat = () => {
     query(collection(firestore, "messeges"), orderBy("createAt", "asc"))
   );
   const setMessage = async () => {
-    if ( value.split(' ').join('') !== "" && value.length < 255) {
+    if (value.split(" ").join("") !== "" && value.length < 255) {
       addDoc(collection(firestore, "messeges"), {
         uid: user.uid,
         displayName: user.displayName,
@@ -171,15 +171,16 @@ const Chat = () => {
           </Input>
           <TextField
             id="standard-basic"
-            variant="standard"
+            variant="outlined"
             fullWidth
             label={fileBool ? "one image" : ""}
             maxRows={2}
+            size="small"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             style={{
-              background: "none",
-              borderColor: "none",
+              background: "#343434",
+              borderColor: "#343434",
               color: "white",
             }}
           />
@@ -201,7 +202,13 @@ const Chat = () => {
 function Content(props) {
   if (props.message.image === undefined) {
     return <div>{props.message.text}</div>;
-  } else return (<div>{props.message.text}</div><img src={props.message.image} size="100" width="250px" />)
+  } else
+    return (
+      <>
+        <div>{props.message.text}</div>
+        <img src={props.message.image} size="100" width="250px" />
+      </>
+    );
 }
 
 export default Chat;
