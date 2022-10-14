@@ -1,7 +1,7 @@
 {
   "name": "web_chat",
   "version": "0.1.0",
-  "homepage": "https://nikolinc.github.io/Web_Chat",
+  "homepage": "https://nikolinc.github.io/Web_Chat/index.html",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
