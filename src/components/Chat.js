@@ -35,7 +35,7 @@ const Chat = () => {
     query(collection(firestore, "messeges"), orderBy("createAt", "asc"))
   );
   const setMessage = async () => {
-    if (value !== "" && value.length < 255) {
+    if ( value.split(' ').join('') !== "" && value.length < 255) {
       addDoc(collection(firestore, "messeges"), {
         uid: user.uid,
         displayName: user.displayName,
@@ -201,7 +201,7 @@ const Chat = () => {
 function Content(props) {
   if (props.message.image === undefined) {
     return <div>{props.message.text}</div>;
-  } else return <img src={props.message.image} size="100" width="250px" />;
+  } else return (<img src={props.message.image} size="100" width="250px" />)
 }
 
 export default Chat;
