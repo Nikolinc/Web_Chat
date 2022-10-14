@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../index";
 import { useAuthState } from "react-firebase-hooks/auth";
+import "../../node_modules/video-react/dist/video-react.css";
 import {
   Grid,
   Container,
@@ -22,6 +23,7 @@ import {
   uploadBytesResumable,
   getStorage,
 } from "firebase/storage";
+import { Player } from "video-react";
 
 const Chat = () => {
   const { auth, firestore } = useContext(Context);
@@ -149,6 +151,7 @@ const Chat = () => {
             variant={"outlined"}
             accept="image/*"
             placeholder="none"
+            label=""
             onChange={(e) => {
               setFiles(e.target.files);
               console.log(e.target.files);
@@ -202,6 +205,20 @@ const Chat = () => {
 function Content(props) {
   if (props.message.image === undefined) {
     return <div>{props.message.text}</div>;
+  } else if (
+    props.message.image.includes(".mp4") ||
+    props.message.image.includes(".avi")
+  ) {
+    return (
+      <Player
+        playsInline
+        src={props.message.image}
+        width={250}
+        aspectRatio="16:9"
+      >
+        <source className="playerVideo" src={props.message.image} />
+      </Player>
+    );
   } else
     return (
       <>
