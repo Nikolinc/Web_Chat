@@ -9,47 +9,80 @@ import {
   Avatar,
   radioClasses,
 } from "@mui/material";
+import { Input } from "@mui/material";
+import Fab from "@mui/material/Fab";
 import imageIcon from "@mui/icons-material/MoveToInbox";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import Loader from "./Loader";
-import { Timestamp, FieldValue } from "firebase/firestore";
+import { FieldValue } from "firebase/firestore";
 import { collection, addDoc, query, orderBy } from "firebase/firestore";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+  getStorage,
+} from "firebase/storage";
 
 const Chat = () => {
   const { auth, firestore } = useContext(Context);
   const [user] = useAuthState(auth);
   const [value, setValue] = useState("");
+  const [fileBool, setFileBool] = useState(false);
+  const [imgUrl, setImgUrl] = useState(null);
+  const [percent, setPercent] = useState(0);
+  const [cFiles, setFiles] = useState([]);
   const [messages, loading] = useCollectionData(
     query(collection(firestore, "messeges"), orderBy("createAt"))
   );
 
   const setMessage = async () => {
-    addDoc(collection(firestore, "messeges"), {
-      uid: user.uid,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      text: value,
-      createAt: Date(),
-    });
-    setValue("");
-    console.log(FieldValue);
-    console.log(Date());
-  };
-  const handleImageChange = async (evt) => {
-    const cFiles = evt.target.files;
-    if (cFiles.length > 0) {
-      const reader = new FileReader();
-      reader.readAsDataURL(cFiles[0]);
-      console.log(reader);
+    if (value !== "" && value.length < 255) {
       addDoc(collection(firestore, "messeges"), {
         uid: user.uid,
         displayName: user.displayName,
         photoURL: user.photoURL,
-        text: "",
-        image: reader.result,
+        text: value,
         createAt: Date(),
       });
+      setValue("");
+      console.log(FieldValue);
+      console.log(Date());
+    }
+  };
+
+  const handleImageChange = async () => {
+    if (cFiles.length > 0) {
+      const storage = getStorage();
+      const storageRef = ref(storage, `files/${cFiles[0].name}`);
+      console.log(storageRef);
+      const uploadTask = uploadBytesResumable(storageRef, cFiles[0]);
+      console.log(uploadTask);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setPercent(percent);
+        },
+        (err) => console.log(err),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            addDoc(collection(firestore, "messeges"), {
+              uid: user.uid,
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+              text: value,
+              image: url,
+              createAt: Date(),
+            });
+            console.log(url);
+          });
+        }
+      );
     } else this.formData.image = "";
+    setFileBool(false);
   };
 
   if (loading) {
@@ -95,7 +128,7 @@ const Chat = () => {
                 <Avatar src={message.photoURL} />
                 <div>{message.displayName}</div>
               </Grid>
-              <div>{message.text}</div>
+              <Content message={message} />
             </div>
           ))}
         </div>
@@ -109,25 +142,39 @@ const Chat = () => {
             background: "#343434",
             width: "70%",
             height: "4%",
-            borderRadius: "5px",
+            borderRadius: "10px",
           }}
         >
-          <Button
+          <Input
+            type="file"
             variant={"outlined"}
-            onClick={() => {
-              if (value !== "" && value.length < 255) setMessage();
+            accept="image/*"
+            placeholder="none"
+            onChange={(e) => {
+              setFiles(e.target.files);
+              console.log(e.target.files);
+              setFileBool(true);
             }}
             style={{
               color: "#fff",
               borderColor: "#343434",
-              width: "5%",
-              borderRadius: "5px",
+              borderRadius: "10px",
             }}
-          ></Button>
+          >
+            <img
+              src={
+                "https://github.com/Nikolinc/Web_Chat/blob/main/src/assets/file.png?raw=true"
+              }
+              width="25px"
+              size="100px"
+              draggable="false"
+            />
+          </Input>
           <TextField
             id="standard-basic"
             variant="standard"
             fullWidth
+            label={fileBool ? "one image" : ""}
             maxRows={2}
             value={value}
             onChange={(e) => setValue(e.target.value)}
@@ -140,7 +187,7 @@ const Chat = () => {
           <Button
             variant={"outlined"}
             onClick={() => {
-              if (value !== "" && value.length < 255) setMessage();
+              fileBool ? handleImageChange() : setMessage();
             }}
             style={{ color: "#fff", borderColor: "#343434", width: "15%" }}
           >
@@ -151,5 +198,11 @@ const Chat = () => {
     </Container>
   );
 };
+
+function Content(props) {
+  if (props.message.image === undefined) {
+    return <div>{props.message.text}</div>;
+  } else return <img src={props.message.image} size="100" width="250px" />;
+}
 
 export default Chat;

@@ -93,8 +93,8 @@
 }
 
 body {
-  background: #424952;
-  background-size: 1800px;
+  background: url("https://github.com/Nikolinc/Web_Chat/blob/main/src/assets/background.png?raw=true");
+  background-size: 1900px;
   color: #fff;
 }
 #standard-basic {
