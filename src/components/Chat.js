@@ -32,9 +32,8 @@ const Chat = () => {
   const [percent, setPercent] = useState(0);
   const [cFiles, setFiles] = useState([]);
   const [messages, loading] = useCollectionData(
-    query(collection(firestore, "messeges"), orderBy("createAt"))
+    query(collection(firestore, "messeges"), orderBy("createAt", "asc"))
   );
-
   const setMessage = async () => {
     if (value !== "" && value.length < 255) {
       addDoc(collection(firestore, "messeges"), {
