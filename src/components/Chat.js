@@ -201,7 +201,7 @@ const Chat = () => {
 function Content(props) {
   if (props.message.image === undefined) {
     return <div>{props.message.text}</div>;
-  } else return (<img src={props.message.image} size="100" width="250px" />)
+  } else return (<div>{props.message.text}</div><img src={props.message.image} size="100" width="250px" />)
 }
 
 export default Chat;
