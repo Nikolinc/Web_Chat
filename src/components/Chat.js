@@ -214,10 +214,8 @@ function Content(props) {
         playsInline
         src={props.message.image}
         width={250}
-        aspectRatio="16:9"
-      >
-        <source className="playerVideo" src={props.message.image} />
-      </Player>
+        autoPlay={true}
+      />
     );
   } else
     return (
