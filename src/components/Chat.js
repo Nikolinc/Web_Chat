@@ -221,7 +221,9 @@ function Content(props) {
     return (
       <>
         <div>{props.message.text}</div>
-        <img src={props.message.image} size="100" width="250px" />
+        <a href={props.message.image} target="_blank">
+          <img src={props.message.image} size="100" width="250px" />
+        </a>
       </>
     );
 }
