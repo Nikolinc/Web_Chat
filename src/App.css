@@ -106,3 +106,40 @@ body {
   size: 100px;
   height: 250px;
 }
+
+.file-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+}
+.file-input__input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.file-input__label {
+  min-width: 150px;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 12px;
+}
+
+.file-input__label:hover {
+  background-color: rgba(223, 223, 223, 0.25);
+}
+
+.file-input__label svg {
+  height: 16px;
+  margin-right: 4px;
+}

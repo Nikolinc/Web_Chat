@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../index";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
 import { useAuthState } from "react-firebase-hooks/auth";
 import "../../node_modules/video-react/dist/video-react.css";
+
 import {
   Grid,
   Container,
@@ -9,6 +12,7 @@ import {
   Button,
   Avatar,
   radioClasses,
+  Box,
 } from "@mui/material";
 import { Input } from "@mui/material";
 import Fab from "@mui/material/Fab";
@@ -24,6 +28,7 @@ import {
   getStorage,
 } from "firebase/storage";
 import { Player } from "video-react";
+import Message from "./Message";
 
 const Chat = () => {
   const { auth, firestore } = useContext(Context);
@@ -86,141 +91,182 @@ const Chat = () => {
     setFileBool(false);
   };
 
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+    height: "100%",
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  }));
+
   if (loading) {
     return <Loader />;
   }
   return (
-    <Container>
+    <Grid container spacing={2}>
       <Grid
-        container
-        style={{
-          height: window.innerHeight - 50,
-          marginTop: 20,
-          overflow: "hidden",
-        }}
-        justifyContent="center"
+        item
+        xs={3}
+        md={3}
+        display="flex"
+        justifyContent="flex-start"
+        style={{ height: "100vh", width: "10%" }}
       >
-        <div
-          style={{
-            width: "80%",
-            height: "78vh",
-            //border: "1px solid black",
-            overflow: "auto",
-          }}
-        >
-          {messages.map((message) => (
+        <Container style={{ background: "#343434" }}>
+          <Message />
+        </Container>
+      </Grid>
+      <Grid xs={8} md={8}>
+        <Container>
+          <Grid
+            container
+            style={{
+              height: window.innerHeight - 50,
+              marginTop: 20,
+              overflow: "hidden",
+            }}
+            justifyContent="center"
+          >
             <div
               style={{
-                width: "250px",
-                margin: 10,
-                background: "#333",
-                marginLeft: user.uid === message.uid ? "auto" : "10px",
-                color: "white",
-                borderRadius:
-                  user.uid === message.uid
-                    ? "10px 0px 10px 10px"
-                    : "0px 10px 10px 10px",
-                padding: 5,
-                justifyContent:
-                  user.uid === message.uid ? "flex-end" : "flex-start",
+                width: "80%",
+                height: "78vh",
+                //border: "1px solid black",
+                overflow: "auto",
               }}
             >
-              <Grid container>
-                <Avatar src={message.photoURL} />
-                <div>{message.displayName}</div>
-              </Grid>
-              <Content message={message} />
+              {messages?.map((message) => (
+                <div
+                  style={{
+                    width: "250px",
+                    margin: 10,
+                    background: "#333",
+                    marginLeft: user.uid === message.uid ? "auto" : "10px",
+                    color: "white",
+                    borderRadius:
+                      user.uid === message.uid
+                        ? "10px 0px 10px 10px"
+                        : "0px 10px 10px 10px",
+                    padding: 5,
+                    justifyContent:
+                      user.uid === message.uid ? "flex-end" : "flex-start",
+                  }}
+                >
+                  <Grid container>
+                    <Avatar src={message.photoURL} />
+                    <div>{message.displayName}</div>
+                  </Grid>
+                  <Content message={message} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <Grid
-          container
-          component="form"
-          //direction={"row-reverse"}
-          //alignItems={"flex-end"}
-          flexWrap={"nowrap"}
-          style={{
-            background: "#343434",
-            width: "70%",
-            height: "4%",
-            borderRadius: "10px",
-          }}
-        >
-          <Input
-            type="file"
-            variant={"outlined"}
-            accept="image/*"
-            placeholder="none"
-            label=""
-            onChange={(e) => {
-              setFiles(e.target.files);
-              console.log(e.target.files);
-              setFileBool(true);
-            }}
-            style={{
-              color: "#fff",
-              borderColor: "#343434",
-              borderRadius: "10px",
-            }}
-          >
-            <img
-              src={
-                "https://github.com/Nikolinc/Web_Chat/blob/main/src/assets/file.png?raw=true"
-              }
-              width="25px"
-              size="100px"
-              draggable="false"
-            />
-          </Input>
-          <TextField
-            id="standard-basic"
-            variant="outlined"
-            fullWidth
-            label={fileBool ? "one image" : ""}
-            maxRows={2}
-            size="small"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            style={{
-              background: "#343434",
-              borderColor: "#343434",
-              color: "white",
-            }}
-          />
-          <Button
-            variant={"outlined"}
-            onClick={() => {
-              fileBool ? handleImageChange() : setMessage();
-            }}
-            style={{ color: "#fff", borderColor: "#343434", width: "15%" }}
-          >
-            Send
-          </Button>
-        </Grid>
+            <Grid
+              container
+              component="form"
+              //direction={"row-reverse"}
+              //alignItems={"flex-end"}
+              flexWrap={"nowrap"}
+              style={{
+                background: "#343434",
+                width: "70%",
+                height: "4%",
+                borderRadius: "10px",
+              }}
+            >
+              <div className="file-input">
+                <Input
+                  type="file"
+                  name="file-input"
+                  id="file-input"
+                  class="file-input__input"
+                  onChange={(e) => {
+                    setFiles(e.target.files);
+                    console.log(e.target.files);
+                    setFileBool(true);
+                  }}
+                />
+                <label
+                  class="file-input__label"
+                  for="file-input"
+                  type="file"
+                  accept="image/*"
+                >
+                  <img
+                    src="https://github.com/Nikolinc/Web_Chat/blob/main/src/assets/file.png?raw=true"
+                    height="30px"
+                  />
+                </label>
+              </div>
+
+              <TextField
+                id="standard-basic"
+                variant="outlined"
+                fullWidth
+                label={fileBool ? "one image" : ""}
+                maxRows={2}
+                size="small"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                style={{
+                  background: "#343434",
+                  borderColor: "#343434",
+                  color: "white",
+                }}
+              />
+              <Button
+                variant={"outlined"}
+                onClick={() => {
+                  fileBool ? handleImageChange() : setMessage();
+                }}
+                style={{ color: "#fff", borderColor: "#343434", width: "15%" }}
+              >
+                Send
+              </Button>
+            </Grid>
+          </Grid>
+        </Container>
       </Grid>
-    </Container>
+    </Grid>
   );
 };
 
 function Content(props) {
   if (props.message.image === undefined) {
-    return <div>{props.message.text}</div>;
+    return (
+      <div>
+        <p>
+          <span>{props.message.text}</span>
+        </p>
+      </div>
+    );
   } else if (
     props.message.image.includes(".mp4") ||
     props.message.image.includes(".avi")
   ) {
     return (
-      <Player
-        playsInline
-        src={props.message.image}
-        width={250}
-        autoPlay={true}
-      />
+      <>
+        <div>
+          <p>
+            <span>{props.message.text}</span>
+          </p>
+        </div>
+        <Player
+          playsInline
+          src={props.message.image}
+          width={250}
+          autoPlay={true}
+        />
+      </>
     );
   } else
     return (
       <>
-        <div>{props.message.text}</div>
+        <div>
+          <p>
+            <span>{props.message.text}</span>
+          </p>
+        </div>
         <a href={props.message.image} target="_blank">
           <img src={props.message.image} size="100" width="250px" />
         </a>
