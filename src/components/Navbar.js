@@ -10,16 +10,19 @@ const Navbar = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <AppBar position="static" style={{ background: "rgb(54, 54, 54)" }}>
+    <AppBar
+      position="static"
+      style={{ background: "rgb(54, 54, 54)", paddingButton: "5px" }}
+    >
       <Toolbar variant={"dense"} sx={{ flexGrow: 2 }}>
-        <Grid container spacing={2} minHeight={20}>
+        <Grid container spacing={2} minHeight={55}>
           {user ? (
             <>
               <Grid
                 xs
                 display="flex"
                 justifyContent="flex-start"
-                alignItems="flex-start"
+                alignItems="flex-end"
                 style={{ marginleft: "50px" }}
               >
                 <Avatar src={user.photoURL} alt={user.displayName} />
