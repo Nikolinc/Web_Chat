@@ -17,8 +17,11 @@
   background-color: var(--background);
   font-size: large;
   font-weight: bold;
-  padding: 20px;
-  height: calc(100vh - 40px);
+  height: 100vh;
   transition: all .5s;
 }
 
+.link{
+  color: #00A3A3;
+  text-decoration: none;
+}
