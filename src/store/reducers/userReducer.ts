@@ -1,7 +1,7 @@
 import { userAction, userActionTypes, UserState } from "../../types/user";
 
 export const initialState: UserState = {
-  users: [],
+  users: null,
   loading: false,
   error: null,
 };
@@ -9,14 +9,14 @@ export const initialState: UserState = {
 export function userRerucer(
   state = initialState,
   action: userAction
-): UserState | undefined {
+): UserState {
   switch (action.type) {
     case userActionTypes.FETCH_USER:
-      return { loading: true, error: null, users: [] };
+      return { loading: true, error: null, users: null };
     case userActionTypes.FETCH_USER_SUCCESS:
       return { loading: false, error: null, users: action.payload };
     case userActionTypes.FETCH_USER_ERROR:
-      return { loading: false, error: action.payload, users: [] };
+      return { loading: false, error: action.payload, users: null };
     default:
       return state;
   }
