@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/global.scss";
 import useLocalStorage from "use-local-storage";
+import { BrowserRouter } from "react-router-dom";
+import Loader from "../components/loader/index";
+import AppRouter from "../components/routing/AppRouter";
+import { useTypedSelector } from "../hooks/useTypedSelector";
+import { fetchUser } from "../store/action-creators/user";
+import { useAction } from "../hooks/useAction";
 
 function App() {
+  const { users, error, loading } = useTypedSelector((state) => state.user);
+  const { fetchUser } = useAction();
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  console.log(users);
   const defaultDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const [theme, setTheme] = useLocalStorage(
     "theme",
@@ -13,22 +27,20 @@ function App() {
     setTheme(newTeam);
   };
 
+  if (loading) {
+    return (
+      <div className="App" data-theme={theme}>
+        <Loader />
+      </div>
+    );
+  }
+
+
   return (
     <div className="App" data-theme={theme}>
-      <header className="App-header">
-        <button onClick={() => switchTheme()}> switch theme</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
     </div>
   );
 }
