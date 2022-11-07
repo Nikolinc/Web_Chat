@@ -6,8 +6,8 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import NoPages from "../noPages";
 
 const AppRouter = () => {
-  const { users } = useTypedSelector((state) => state.user);
-  return( users ? (
+  const { user } = useTypedSelector((state) => state.user);
+  return user ? (
     <Switch>
       {privateRoutes.map(({ path, Component }) => (
         <Route key={path} path={path} component={Component} exact={true} />
@@ -19,10 +19,9 @@ const AppRouter = () => {
       {publicRoutes.map(({ path, Component }) => (
         <Route key={path} path={path} component={Component} exact={true} />
       ))}
-       <Route key={'error'} component = {NoPages} exact={true} />
+      {/* <Route key={'error'} component = {NoPages} exact={true} /> */}
       <Redirect to={LOGIN_ROUTES} />
     </Switch>
-  )
   );
 };
 

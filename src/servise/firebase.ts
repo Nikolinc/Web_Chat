@@ -1,8 +1,7 @@
-
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDteQeQVZYF4r8YNku7tyRFm-Ax7KEfElg",
