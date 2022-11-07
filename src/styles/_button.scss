@@ -1,7 +1,37 @@
 button {
-  color: var(--text-primary);
-  background-color: var(--background);
-  border: 2px var(--text-primary) solid;
+  color: var(--background);
+  background-color: var(--text-primary);
+  border:none;
+  border-radius:2px;
   float: right;
+  width: 70px;
+  height: 27.2px;
+  margin-top: 10px;
   transition: all .5s;
+
+  font-family: 'Inder';
+  font-style: normal;
+  font-weight: 40px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+button:hover{
+  color: var(--text-primary);
+  background-color: var(--accent);
+}
+
+.buttonIcon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  height:48px;
+  width: 48px;
+  img{
+    height: 48px;
+    width: 48px;
+    size: 482px;
+  }
+  
 }
