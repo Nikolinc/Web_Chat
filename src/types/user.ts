@@ -1,5 +1,5 @@
 export interface UserState {
-  users: any;
+  user: any;
   loading: boolean;
   error: null | string;
 }
